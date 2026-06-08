@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Family Road Trip 2026 — Rocklin to Billings</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --green: #1D9E75; --green-light: #E1F5EE; --green-dark: #085041;
+    --amber: #EF9F27; --amber-light: #FAEEDA; --amber-dark: #633806;
+    --blue: #378ADD; --blue-light: #E6F1FB; --blue-dark: #0C447C;
+    --coral: #D85A30; --coral-light: #FAECE7; --coral-dark: #4A1B0C;
+    --sand: #F5F2ED; --sand-mid: #E8E3DA; --ink: #1C1917; --muted: #6B6560;
+    --border: rgba(0,0,0,0.10); --radius: 12px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: var(--sand); color: var(--ink); min-height: 100vh; line-height: 1.6; }
+  .hero { background: linear-gradient(135deg, #0f3d2e 0%, #1D9E75 50%, #0c3558 100%); color: white; padding: 60px 24px 48px; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E'); }
+  .hero-eyebrow { font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.7; margin-bottom: 12px; }
+  .hero-title { font-family: 'Playfair Display', Georgia, serif; font-size: clamp(32px, 5vw, 56px); font-weight: 700; line-height: 1.15; margin-bottom: 16px; }
+  .hero-sub { font-size: 16px; opacity: 0.85; margin-bottom: 32px; }
+  .hero-stats { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+  .hero-stat { text-align: center; }
+  .hero-stat-num { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; }
+  .hero-stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.65; margin-top: 2px; }
+  .route-bar { background: white; border-bottom: 1px solid var(--border); padding: 20px 24px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .route-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; overflow-x: auto; scrollbar-width: none; }
+  .route-inner::-webkit-scrollbar { display: none; }
+  .route-stop { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; }
+  .route-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green); }
+  .route-dot.origin { background: white; border: 2px solid var(--green); }
+  .route-dot.dest { background: var(--amber); }
+  .route-label { font-size: 10px; color: var(--muted); white-space: nowrap; margin-top: 5px; font-weight: 500; }
+  .route-line { height: 2px; background: var(--sand-mid); flex: 1; min-width: 20px; margin-bottom: 18px; }
+  .main { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+  .actions-section { margin-bottom: 36px; }
+  .section-heading { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 500; margin-bottom: 16px; color: var(--ink); }
+  .actions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  .action-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; display: flex; gap: 12px; align-items: flex-start; }
+  .action-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .action-icon.red { background: var(--coral-light); } .action-icon.amber { background: var(--amber-light); } .action-icon.green { background: var(--green-light); } .action-icon.blue { background: var(--blue-light); }
+  .action-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+  .action-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
+  .day-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 16px; overflow: hidden; transition: box-shadow 0.2s; }
+  .day-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  .day-card.open { box-shadow: 0 4px 24px rgba(0,0,0,0.10); }
+  .day-header { display: flex; align-items: center; gap: 14px; padding: 18px 20px; cursor: pointer; user-select: none; }
+  .day-num { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--sand-mid); min-width: 40px; line-height: 1; }
+  .day-card.open .day-num { color: var(--green); }
+  .day-badge { font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
+  .badge-drive { background: var(--blue-light); color: var(--blue-dark); } .badge-hike { background: var(--amber-light); color: var(--amber-dark); } .badge-explore { background: var(--green-light); color: var(--green-dark); } .badge-fish { background: var(--blue-light); color: var(--blue-dark); } .badge-arrive { background: var(--coral-light); color: var(--coral-dark); }
+  .day-header-text { flex: 1; min-width: 0; }
+  .day-title { font-size: 15px; font-weight: 600; color: var(--ink); }
+  .day-date { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .day-weather { display: flex; flex-direction: column; align-items: flex-end; flex-shrink: 0; gap: 2px; }
+  .weather-high { font-size: 13px; font-weight: 600; color: var(--ink); white-space: nowrap; }
+  .weather-low { font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .chevron { font-size: 18px; color: var(--muted); transition: transform 0.25s; flex-shrink: 0; }
+  .day-card.open .chevron { transform: rotate(180deg); color: var(--green); }
+  .day-body { display: none; border-top: 1px solid var(--border); padding: 20px; }
+  .day-card.open .day-body { display: block; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .chip { background: var(--sand); border: 1px solid var(--sand-mid); border-radius: 8px; padding: 8px 14px; }
+  .chip-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 2px; }
+  .chip-val { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .subsection { margin-bottom: 18px; }
+  .subsection-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .subsection-title::after { content: ''; flex: 1; height: 1px; background: var(--sand-mid); }
+  .bullet-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .bullet-list li { font-size: 14px; color: var(--ink); display: flex; gap: 10px; line-height: 1.5; }
+  .bullet-list li::before { content: ''; flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--green); margin-top: 8px; }
+  .callout { border-radius: 8px; padding: 12px 16px; margin-top: 14px; font-size: 13px; line-height: 1.55; }
+  .callout-warn { background: var(--amber-light); border-left: 3px solid var(--amber); color: var(--amber-dark); }
+  .callout-info { background: var(--blue-light); border-left: 3px solid var(--blue); color: var(--blue-dark); }
+  .callout-tip { background: var(--green-light); border-left: 3px solid var(--green); color: var(--green-dark); }
+  .callout-alert { background: var(--coral-light); border-left: 3px solid var(--coral); color: var(--coral-dark); }
+  .weather-note { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 18px; font-size: 12px; color: var(--muted); margin-bottom: 32px; display: flex; align-items: center; gap: 10px; }
+</style>
+</head>
+<body>
+<div class="hero">
+  <p class="hero-eyebrow">Jason &amp; Family · June 2026</p>
+  <h1 class="hero-title">The Great Western<br>Road Trip</h1>
+  <p class="hero-sub">Rocklin, CA → Zion → Grand Canyon → Moab → Flaming Gorge → Billings, MT</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num">9</div><div class="hero-stat-label">Days</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">~2,400</div><div class="hero-stat-label">Miles</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">5</div><div class="hero-stat-label">Parks</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">Jun 12–20</div><div class="hero-stat-label">Dates</div></div>
+  </div>
+</div>
+<div class="route-bar">
+  <div class="route-inner">
+    <div class="route-stop"><div class="route-dot origin"></div><div class="route-label">Rocklin CA</div></div>
+    <div class="route-line"></div>
+    <div class="route-stop"><div class="route-dot"></div><div class="route-label">Eureka NV</div></div>
+    <div class="route-line"></div>
+    <div class="route-stop"><div class="route-dot"></div><div class="route-label">Zion UT</div></div>
+    <div class="route-line"></div>
+    <div class="route-stop"><div class="route-dot"></div><div class="route-label">Grand Canyon AZ</div></div>
+    <div class="route-line"></div>
+    <div class="route-stop"><div class="route-dot"></div><div class="route-label">Moab UT</div></div>
+    <div class="route-line"></div>
+    <div class="route-stop"><div class="route-dot"></div><div class="route-label">Flaming Gorge</div></div>
+    <div class="route-line"></div>
+    <div class="route-stop"><div class="route-dot"></div><div class="route-label">Rock Springs WY</div></div>
+    <div class="route-line"></div>
+    <div class="route-stop"><div class="route-dot dest"></div><div class="route-label">Billings MT</div></div>
+  </div>
+</div>
+<div class="main">
+  <div class="actions-section">
+    <h2 class="section-heading">Book these now ⚡</h2>
+    <div class="actions-grid">
+      <div class="action-card"><div class="action-icon green">🥾</div><div><div class="action-title">Arches — Arrive Early</div><div class="action-desc">No reservation needed in 2026! Arrive before 8 AM to beat crowds and heat.</div></div></div>
+      <div class="action-card"><div class="action-icon amber">🏨</div><div><div class="action-title">Rock Springs Hotel (Jun 19)</div><div class="action-desc">Still TBD — Hampton Inn or Holiday Inn Express recommended.</div></div></div>
+      <div class="action-card"><div class="action-icon green">🏞️</div><div><div class="action-title">America the Beautiful Pass</div><div class="action-desc">$80 covers Zion, Arches, Grand Canyon &amp; Flaming Gorge.</div></div></div>
+      <div class="action-card"><div class="action-icon blue">🎣</div><div><div class="action-title">Utah Fishing Licenses</div><div class="action-desc">Buy online at wildlife.utah.gov before departure.</div></div></div>
+      <div class="action-card"><div class="action-icon amber">🍽️</div><div><div class="action-title">Grand Canyon Dinner</div><div class="action-desc">Check El Tovar / Bright Angel reservation for Jun 15 evening.</div></div></div>
+      <div class="action-card"><div class="action-icon blue">🌊</div><div><div class="action-title">Narrows Flood Check</div><div class="action-desc">Check nps.gov/zion the evening of Jun 13 before Sunday hike.</div></div></div>
+    </div>
+  </div>
+  <div class="weather-note">☁️ <span><strong>Weather note:</strong> Live forecasts only extend to Jun 12. Morning lows and high temps for Jun 13–20 are seasonal averages based on historical climate data. Check weather.gov closer to departure for updated forecasts.</span></div>
+  <h2 class="section-heading">Day-by-day itinerary</h2>
+
+  <!-- DAY 1 -->
+  <div class="day-card" id="day1">
+    <div class="day-header" onclick="toggleDay('day1')">
+      <div class="day-num">01</div>
+      <span class="day-badge badge-drive">🚗 Drive</span>
+      <div class="day-header-text"><div class="day-title">Rocklin, CA → Eureka, NV</div><div class="day-date">Friday, June 12 · Depart 3–4 PM</div></div>
+      <div class="day-weather"><div class="weather-high">82°F ☀️</div><div class="weather-low">Morning low ~51°F</div></div>
+      <div class="chevron">▾</div>
+    </div>
+    <div class="day-body">
+      <div class="chips">
+        <div class="chip"><div class="chip-label">Depart</div><div class="chip-val">3–4 PM</div></div>
+        <div class="chip"><div class="chip-label">Drive time</div><div class="chip-val">~5.5–6 hrs</div></div>
+        <div class="chip"><div class="chip-label">Distance</div><div class="chip-val">~355–360 miles</div></div>
+        <div class="chip"><div class="chip-label">Arrive (est.)</div><div class="chip-val">9–10 PM</div></div>
+        <div class="chip"><div class="chip-label">Staying</div><div class="chip-val">SureStay by Best Western ✓</div></div>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">Route &amp; notes</div>
+        <ul class="bullet-list">
+          <li>Take I-80 E from Rocklin through the Sierra Nevada, then US-50 E across the Nevada desert — "The Loneliest Road in America." Fill up in Rocklin or Fallon, NV; very sparse gas stations on US-50.</li>
+          <li>Arriving around 9–10 PM, so plan dinner on the road or grab something quick in Fallon before the final stretch.</li>
+          <li>Eureka is a historic mining town. If you have energy on arrival, the Owl Club or Jackson House Hotel restaurant are the main dinner spots — confirm hours given your late arrival.</li>
+          <li>Set an early alarm — long drive to Springdale tomorrow with gear shopping to do on arrival.</li>
+        </ul>
+      </div>
+      <div class="callout callout-info">🛏️ <strong>Lodging:</strong> SureStay by Best Western, Eureka NV — reserved. Clean, simple stop for the night.</div>
+    </div>
+  </div>
+
+  <!-- DAY 2 -->
+  <div class="day-card" id="day2">
+    <div class="day-header" onclick="toggleDay('day2')">
+      <div class="day-num">02</div>
+      <span class="day-badge badge-drive">🚗 Drive + Arrive</span>
+      <div class="day-header-text"><div class="day-title">Eureka, NV → Springdale, UT (Zion)</div><div class="day-date">Saturday, June 13 · Early start recommended</div></div>
+      <div class="day-weather"><div class="weather-high">~95°F ☀️</div><div class="weather-low">Morning low ~62°F</div></div>
+      <div class="chevron">▾</div>
+    </div>
+    <div class="day-body">
+      <div class="chips">
+        <div class="chip"><div class="chip-label">Drive time</div><div class="chip-val">~5.5–6 hrs</div></div>
+        <div class="chip"><div class="chip-label">Distance</div><div class="chip-val">~380 miles</div></div>
+        <div class="chip"><div class="chip-label">High temp (Zion)</div><div class="chip-val">~95°F</div></div>
+        <div class="chip"><div class="chip-label">Morning low</div><div class="chip-val">~62°F</div></div>
+        <div class="chip"><div class="chip-label">Staying</div><div class="chip-val">VRBO · 180 Zion Park Blvd ✓</div></div>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">Route notes</div>
+        <ul class="bullet-list">
+          <li>Head south via US-93 or US-95, then US-89 S into Utah — beautiful canyon and desert scenery.</li>
+          <li><strong>Stop in St. George, UT</strong> (~1 hr before Springdale) — best place to gas up and grab groceries before Springdale's tourist-priced stores.</li>
+        </ul>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">Gear &amp; supplies to pick up in Springdale</div>
+        <ul class="bullet-list">
+          <li><strong>Zion Outfitter or Zion Adventure Company</strong> — rent water shoes, neoprene socks, and trekking poles for The Narrows. Essential for the slippery riverbed.</li>
+          <li>Food for Sunday: sandwiches, trail mix, fruit, and plenty of water. Use a dry bag in the river.</li>
+          <li>Sunscreen, insect repellent, and a light rain layer. Sol Foods Market in Springdale is well stocked.</li>
+        </ul>
+      </div>
+      <div class="callout callout-warn">⚠️ <strong>Narrows flood check:</strong> Saturday evening, check nps.gov/zion for the flash flood advisory before Sunday's hike. June snowmelt can raise water levels significantly.</div>
+    </div>
+  </div>
+
+  <!-- DAY 3 -->
+  <div class="day-card" id="day3">
+    <div class="day-header" onclick="toggleDay('day3')">
+      <div class="day-num">03</div>
+      <span class="day-badge badge-hike">🥾 Hike day</span>
+      <div class="day-header-text"><div class="day-title">Zion National Park — The Narrows</div><div class="day-date">Sunday, June 14 · Early start essential</div></div>
+      <div class="day-weather"><div class="weather-high">~95°F ☀️</div><div class="weather-low">Morning low ~62°F</div></div>
+      <div class="chevron">▾</div>
+    </div>
+    <div class="day-body">
+      <div class="chips">
+        <div class="chip"><div class="chip-label">Anna + kids</div><div class="chip-val">The Narrows hike</div></div>
+        <div class="chip"><div class="chip-label">Jason</div><div class="chip-val">Shuttle sightseeing</div></div>
+        <div class="chip"><div class="chip-label">High temp</div><div class="chip-val">~95°F</div></div>
+        <div class="chip"><div class="chip-label">Morning low</div><div class="chip-val">~62°F</div></div>
+        <div class="chip"><div class="chip-label">Staying</div><div class="chip-val">Same VRBO ✓</div></div>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">Anna &amp; kids — The Narrows</div>
+        <ul class="bullet-list">
+          <li>Start by 6–7 AM — shuttle opens at 6 AM in June. Early start means cooler temps, fewer people, and better light in the canyon.</li>
+          <li>Take shuttle to Stop 9 (Temple of Sinawava). First mile is paved riverside walk, then you wade into the Virgin River.</li>
+          <li>Water shoes + neoprene socks + trekking poles are essential. The river is cold and the riverbed is very slippery.</li>
+          <li>Plan 3–5 hours and turn back before anyone is exhausted — the best scenery is in the first 2 miles.</li>
+        </ul>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">Jason — Shuttle sightseeing</div>
+        <ul class="bullet-list">
+          <li>Free Zion Canyon Shuttle hits all major viewpoints — private cars not allowed on the main road in summer.</li>
+          <li>Best stops: Court of the Patriarchs (Stop 4), Zion Lodge porch (Stop 5) for a cold drink, Weeping Rock (Stop 7) — short easy trail with hanging gardens.</li>
+          <li>Canyon Overlook Trail near the park entrance tunnel — 1 mile, panoramic views, very manageable.</li>
+        </ul>
+      </div>
+      <div class="callout callout-warn">🌡️ Zion hits 95°F+ by noon in June. Plan all hiking done by midday. Afternoon = VRBO, shade, and cold drinks. Oscar's Cafe or Zion Brewing Co. for dinner.</div>
+    </div>
+  </div>
+
+  <!-- DAY 4 -->
+  <div class="day-card" id="day4">
+    <div class="day-header" onclick="toggleDay('day4')">
+      <div class="day-num">04</div>
+      <span class="day-badge badge-drive">🚗 Drive + Explore</span>
+      <div class="day-header-text"><div class="day-title">Zion → Grand Canyon South Rim</div><div class="day-date">Monday, June 15 · Sunset at Hopi Point</div></div>
+      <div class="day-weather"><div class="weather-high">~85°F ☀️</div><div class="weather-low">Morning low ~47°F</div></div>
+      <div class="chevron">▾</div>
+    </div>
+    <div class="day-body">
+      <div class="chips">
+        <div class="chip"><div class="chip-label">Drive time</div><div class="chip-val">~4–4.5 hrs</div></div>
+        <div class="chip"><div class="chip-label">Distance</div><div class="chip-val">~245 miles</div></div>
+        <div class="chip"><div class="chip-label">High temp (Rim)</div><div class="chip-val">~85°F</div></div>
+        <div class="chip"><div class="chip-label">Morning low</div><div class="chip-val">~47°F — bring a layer!</div></div>
+        <div class="chip"><div class="chip-label">Staying</div><div class="chip-val">Grand Canyon Village ✓</div></div>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">Scenic detour en route</div>
+        <ul class="bullet-list">
+          <li><strong>Horseshoe Bend, Page AZ</strong> — only 15 min off US-89. Short 1.5-mile round-trip walk to an iconic Colorado River horseshoe overlook. Great for kids. Don't skip it.</li>
+          <li>Enter Grand Canyon at the South Entrance. Use your America the Beautiful Pass.</li>
+        </ul>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">Sightseeing &amp; sunset</div>
+        <ul class="bullet-list">
+          <li><strong>Mather Point</strong> — first major viewpoint after the entrance. Classic and breathtaking.</li>
+          <li><strong>Bright Angel Trail</strong> — walk 1–1.5 miles down for the real canyon feeling. No full descent in June heat.</li>
+          <li><strong>Hopi Point sunset (Hermit Road Shuttle Stop 7)</strong> — #1 rated sunset spot on the South Rim. Arrive 45 min early. Sunset ~8:00–8:15 PM MST.</li>
+          <li>Dinner: Bright Angel Restaurant (casual, no reservation) or El Tovar if reserved in advance.</li>
+        </ul>
+      </div>
+      <div class="callout callout-warn">🌡️ The Grand Canyon South Rim sits at 7,000 ft — mornings are cool (~47°F), so pack a layer for early walks. It warms fast once the sun is up.</div>
+    </div>
+  </div>
+
+  <!-- DAY 5 -->
+  <div class="day-card" id="day5">
+    <div class="day-header" onclick="toggleDay('day5')">
+      <div class="day-num">05</div>
+      <span class="day-badge badge-drive">🚗 Drive + Scenic</span>
+      <div class="day-header-text"><div class="day-title">Grand Canyon → Moab, UT (Night 1)</div><div class="day-date">Tuesday, June 16 · Monument Valley detour</div></div>
+      <div class="day-weather"><div class="weather-high">~93°F ☀️</div><div class="weather-low">Morning low ~64°F</div></div>
+      <div class="chevron">▾</div>
+    </div>
+    <div class="day-body">
+      <div class="chips">
+        <div class="chip"><div class="chip-label">Drive time</div><div class="chip-val">~5–5.5 hrs</div></div>
+        <div class="chip"><div class="chip-label">Distance</div><div class="chip-val">~340 miles</div></div>
+        <div class="chip"><div class="chip-label">High temp (Moab)</div><div class="chip-val">~93°F</div></div>
+        <div class="chip"><div class="chip-label">Morning low</div><div class="chip-val">~64°F</div></div>
+        <div class="chip"><div class="chip-label">Staying</div><div class="chip-val">Moab hotel ✓ (night 1 of 2)</div></div>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">Scenic stops on the way</div>
+        <ul class="bullet-list">
+          <li><strong>Monument Valley Navajo Tribal Park</strong> — take US-89 N to US-163 N through the valley. Iconic sandstone buttes, free main overlook at the visitor center.</li>
+          <li><strong>Dead Horse Point State Park</strong> (~30 min from Moab) — jaw-dropping Colorado River overlook, rivals the Grand Canyon. Well worth the extra stop.</li>
+          <li>Gas up in Kayenta, AZ or Monticello, UT — long remote stretches on this route.</li>
+        </ul>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">Moab arrival</div>
+        <ul class="bullet-list">
+          <li>Moab is a lively outdoor adventure town. Main Street has great food, gear shops, and local character.</li>
+          <li>Stock up on water and snacks for the Arches hike tomorrow morning.</li>
+          <li>Recommended dinner: Moab Brewery or Pasta Jay's.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 6 -->
+  <div class="day-card" id="day6">
+    <div class="day-header" onclick="toggleDay('day6')">
+      <div class="day-num">06</div>
+      <span class="day-badge badge-hike">🥾 Hike day</span>
+      <div class="day-header-text"><div class="day-title">Arches National Park — Moab (Night 2)</div><div class="day-date">Wednesday, June 17 · Very early start</div></div>
+      <div class="day-weather"><div class="weather-high">~93°F ☀️</div><div class="weather-low">Morning low ~64°F</div></div>
+      <div class="chevron">▾</div>
+    </div>
+    <div class="day-body">
+      <div class="chips">
+        <div class="chip"><div class="chip-label">Wake up</div><div class="chip-val">Before 5:30 AM</div></div>
+        <div class="chip"><div class="chip-label">Hike</div><div class="chip-val">Delicate Arch — 3 mi RT</div></div>
+        <div class="chip"><div class="chip-label">High temp</div><div class="chip-val">~93°F</div></div>
+        <div class="chip"><div class="chip-label">Morning low</div><div class="chip-val">~64°F</div></div>
+        <div class="chip"><div class="chip-label">Staying</div><div class="chip-val">Moab hotel ✓ (night 2 of 2)</div></div>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">Delicate Arch hike</div>
+        <ul class="bullet-list">
+          <li>No timed entry reservation required in 2026 — just show up! Aim to be at the gate before 8 AM to beat the crowds and heat.</li>
+          <li>Start early — the exposed slickrock becomes brutally hot by mid-morning. 3 miles round trip, 480 ft gain, zero shade.</li>
+          <li>2+ liters of water per person, sunscreen, hats — non-negotiable in June heat.</li>
+          <li>Quick additions: Balanced Rock (roadside, 5 min), the Windows Section (easy ½ mi, multiple arches).</li>
+        </ul>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">Rest of the day in Moab</div>
+        <ul class="bullet-list">
+          <li>After the morning hike, relax in Moab — pool, cold drinks, browse Main Street shops.</li>
+          <li>Canyonlands National Park viewpoints (Island in the Sky) are a great afternoon scenic drive if energy allows.</li>
+          <li>Early to bed — driving to Flaming Gorge tomorrow.</li>
+        </ul>
+      </div>
+      <div class="callout callout-tip">🌅 <strong>Early start pays off:</strong> Arrive before 8 AM to beat the crowds — no reservation needed in 2026, so everyone will be showing up. Early also means cooler temps on the trail.</div>
+    </div>
+  </div>
+
+  <!-- DAY 7 -->
+  <div class="day-card" id="day7">
+    <div class="day-header" onclick="toggleDay('day7')">
+      <div class="day-num">07</div>
+      <span class="day-badge badge-drive">🚗 Drive</span>
+      <div class="day-header-text"><div class="day-title">Moab → Flaming Gorge / Buckboard Marina</div><div class="day-date">Thursday, June 18 · Fishing prep day</div></div>
+      <div class="day-weather"><div class="weather-high">~78°F ☀️</div><div class="weather-low">Morning low ~42–45°F</div></div>
+      <div class="chevron">▾</div>
+    </div>
+    <div class="day-body">
+      <div class="chips">
+        <div class="chip"><div class="chip-label">Drive time</div><div class="chip-val">~2.5–3 hrs</div></div>
+        <div class="chip"><div class="chip-label">Distance</div><div class="chip-val">~165 miles</div></div>
+        <div class="chip"><div class="chip-label">High temp</div><div class="chip-val">~78°F — much cooler!</div></div>
+        <div class="chip"><div class="chip-label">Morning low</div><div class="chip-val">~42–45°F (6,400 ft elevation)</div></div>
+        <div class="chip"><div class="chip-label">Staying</div><div class="chip-val">Buckboard Marina area ✓</div></div>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">Drive north to Flaming Gorge</div>
+        <ul class="bullet-list">
+          <li>Head north on US-191 through scenic canyon country — the landscape shifts from red rock to high desert plateaus.</li>
+          <li>Arrive Buckboard Marina area mid-day and check in to lodging.</li>
+          <li>This is a noticeably cooler stop — pack a light jacket for mornings and evenings at 6,400 ft elevation.</li>
+        </ul>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">Fishing prep &amp; supplies</div>
+        <ul class="bullet-list">
+          <li>Confirm charter boat departure time and meeting point for tomorrow morning.</li>
+          <li>Pick up snacks, sandwiches, drinks, and sunscreen for the fishing day — bait, tackle, rods, and gear are all provided by the charter.</li>
+          <li>Utah fishing licenses if needed — wildlife.utah.gov or the marina store.</li>
+          <li>Early to bed — sunrise fishing start at ~5:45 AM tomorrow.</li>
+        </ul>
+      </div>
+      <div class="callout callout-tip">🎣 At ~78°F days and 42°F mornings, Flaming Gorge feels like a refreshing escape after the desert heat of Zion, Grand Canyon, and Moab. Enjoy the cool!</div>
+    </div>
+  </div>
+
+  <!-- DAY 8 -->
+  <div class="day-card" id="day8">
+    <div class="day-header" onclick="toggleDay('day8')">
+      <div class="day-num">08</div>
+      <span class="day-badge badge-fish">🎣 Fishing + Drive</span>
+      <div class="day-header-text"><div class="day-title">Flaming Gorge Fishing → Rock Springs, WY</div><div class="day-date">Friday, June 19 · Fish morning, drive evening</div></div>
+      <div class="day-weather"><div class="weather-high">~78°F ☀️</div><div class="weather-low">Morning low ~42–45°F</div></div>
+      <div class="chevron">▾</div>
+    </div>
+    <div class="day-body">
+      <div class="chips">
+        <div class="chip"><div class="chip-label">Sunrise fishing</div><div class="chip-val">~5:45 AM</div></div>
+        <div class="chip"><div class="chip-label">High temp</div><div class="chip-val">~78°F</div></div>
+        <div class="chip"><div class="chip-label">Morning low</div><div class="chip-val">~42–45°F — dress warm!</div></div>
+        <div class="chip"><div class="chip-label">Drive (evening)</div><div class="chip-val">~45 min to Rock Springs</div></div>
+        <div class="chip"><div class="chip-label">Staying</div><div class="chip-val">Rock Springs WY (TBD ⚠️)</div></div>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">Fishing day</div>
+        <ul class="bullet-list">
+          <li>Get on the water at sunrise (~5:45 AM) — first couple hours are the most productive for lake trout and bass. Dress in warm layers; it'll be 42–45°F on the water at dawn.</li>
+          <li>Flaming Gorge is world-class — lake trout in deeper sections, kokanee salmon and smallmouth bass in shallower bays. The charter captain will put you on fish.</li>
+          <li>Bait, tackle, rods, and all fishing gear provided by the charter. Just bring snacks, drinks, sunscreen, and a good attitude!</li>
+          <li>Fish through the morning and early afternoon, then pack up for the drive.</li>
+        </ul>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">Evening drive to Rock Springs or Green River</div>
+        <ul class="bullet-list">
+          <li><strong>Rock Springs, WY (recommended)</strong> — ~45 miles, ~45 min. Better hotel options (Hampton Inn, Holiday Inn Express, Homewood Suites) and more restaurants.</li>
+          <li><strong>Green River, WY</strong> — ~35 miles, ~35 min. Quieter and closer, fewer amenities.</li>
+        </ul>
+      </div>
+      <div class="callout callout-alert">📋 <strong>Still need to book:</strong> Hotel in Rock Springs or Green River for tonight. Don't leave this to the last minute on a Friday evening in summer.</div>
+    </div>
+  </div>
+
+  <!-- DAY 9 -->
+  <div class="day-card" id="day9">
+    <div class="day-header" onclick="toggleDay('day9')">
+      <div class="day-num">09</div>
+      <span class="day-badge badge-arrive">🏁 Final drive</span>
+      <div class="day-header-text"><div class="day-title">Rock Springs, WY → Billings, MT</div><div class="day-date">Saturday, June 20 · You made it!</div></div>
+      <div class="day-weather"><div class="weather-high">~72°F ☀️</div><div class="weather-low">Morning low ~52°F</div></div>
+      <div class="chevron">▾</div>
+    </div>
+    <div class="day-body">
+      <div class="chips">
+        <div class="chip"><div class="chip-label">Drive time</div><div class="chip-val">~6.5 hrs</div></div>
+        <div class="chip"><div class="chip-label">Distance</div><div class="chip-val">~384 miles</div></div>
+        <div class="chip"><div class="chip-label">High temp (Billings)</div><div class="chip-val">~72°F ☀️</div></div>
+        <div class="chip"><div class="chip-label">Morning low</div><div class="chip-val">~52°F</div></div>
+        <div class="chip"><div class="chip-label">Staying</div><div class="chip-val">2906 Canyon Dr, Billings ✓</div></div>
+      </div>
+      <div class="subsection">
+        <div class="subsection-title">Route to Billings via Thermopolis &amp; Cody</div>
+        <ul class="bullet-list">
+          <li><strong>Rock Springs → Thermopolis</strong> (~195 miles, ~4.5 hrs) via WY-28 N — passes through the stunning Wind River Canyon, one of the most scenic drives in Wyoming. Great gas/snack stop in Thermopolis.</li>
+          <li><strong>Thermopolis → Cody</strong> (~84 miles, ~1.5 hrs) via WY-120 N through the Bighorn Basin — wide open high desert with great mountain views.</li>
+          <li><strong>Cody → Billings</strong> (~105 miles, ~2 hrs) via US-14 Alt / WY-120 N into Montana. Cody is a great spot for lunch — it's Buffalo Bill country with a great main street.</li>
+          <li>Arrive at 2906 Canyon Drive, Billings MT — home base Jun 20–27!</li>
+        </ul>
+      </div>
+      <div class="callout callout-tip">🏁 <strong>You made it!</strong> ~2,400 miles, 5 parks, world-class fishing, and an incredible family adventure. Celebrate with dinner in Billings — try Thyme Kitchen or McCormick Cafe.</div>
+    </div>
+  </div>
+
+</div>
+<script>
+  function toggleDay(id) {
+    const card = document.getElementById(id);
+    card.classList.toggle('open');
+    card.querySelector('.chevron').classList.toggle('open', card.classList.contains('open'));
+  }
+  document.getElementById('day1').classList.add('open');
+</script>
+</body>
+</html>
